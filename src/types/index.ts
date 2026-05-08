@@ -19,6 +19,7 @@ export type Question = {
   teacher_id: string | null
   text: string
   category: string
+  image_url: string | null
   created_at: string
   used?: boolean
 }
@@ -35,6 +36,7 @@ export type Prompt = {
   teacher_id: string | null
   section: 'grounding' | 'checkin' | 'appreciation'
   text: string
+  image_url: string | null
   created_at: string
 }
 

@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useTransition, useCallback, useRef, useEffect } from 'react'
+import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 import type { CircleData, Question, Prompt } from '@/types'
 import { markQuestionUsed, resetUsedQuestions } from '@/actions/circle'
@@ -350,6 +351,11 @@ function SlideshowPrompt({
   return (
     <div className="w-full max-w-3xl text-center">
       <p className="text-sm font-semibold text-indigo-400 uppercase tracking-widest mb-8">{title}</p>
+      {prompt?.image_url && (
+        <div className="relative w-full max-w-lg mx-auto h-56 rounded-2xl overflow-hidden mb-8">
+          <Image src={prompt.image_url} alt="" fill className="object-cover" />
+        </div>
+      )}
       {prompt ? (
         <p className="text-3xl font-medium text-slate-900 leading-snug mb-10">{prompt.text}</p>
       ) : (
@@ -388,6 +394,11 @@ function SlideshowQuestion({
       {question ? (
         <>
           <p className="text-xs font-semibold text-slate-300 uppercase tracking-widest mb-4">{question.category}</p>
+          {question.image_url && (
+            <div className="relative w-full max-w-lg mx-auto h-56 rounded-2xl overflow-hidden mb-8">
+              <Image src={question.image_url} alt="" fill className="object-cover" />
+            </div>
+          )}
           <p className="text-3xl font-medium text-slate-900 leading-snug mb-10">{question.text}</p>
           {question.used && (
             <p className="text-sm text-slate-300 mb-6">Already used</p>
@@ -527,8 +538,15 @@ function StepPrompt({ title, prompt, allPrompts, onPickRandom, onSelect }: {
         <h2 className="text-2xl font-bold text-slate-900">{title}</h2>
       </div>
       {prompt ? (
-        <div className="bg-white rounded-2xl border border-slate-200 p-8 mb-6">
-          <p className="text-lg text-slate-800 leading-relaxed">{prompt.text}</p>
+        <div className="bg-white rounded-2xl border border-slate-200 overflow-hidden mb-6">
+          {prompt.image_url && (
+            <div className="relative w-full h-48">
+              <Image src={prompt.image_url} alt="" fill className="object-cover" />
+            </div>
+          )}
+          <div className="p-8">
+            <p className="text-lg text-slate-800 leading-relaxed">{prompt.text}</p>
+          </div>
         </div>
       ) : (
         <div className="bg-slate-100 rounded-2xl p-8 mb-6 text-center text-slate-400">No prompt selected</div>
@@ -575,10 +593,17 @@ function StepQuestions({ currentQuestion, questions, unusedCount, showPicker, is
         <p className="text-slate-500 mt-1">{unusedCount} unused question{unusedCount !== 1 ? 's' : ''} remaining</p>
       </div>
       {currentQuestion ? (
-        <div className={`rounded-2xl border-2 p-8 mb-6 transition-colors ${currentQuestion.used ? 'border-slate-200 bg-slate-50' : 'border-indigo-200 bg-white'}`}>
-          <div className="text-xs font-semibold text-indigo-400 uppercase tracking-wide mb-3">{currentQuestion.category}</div>
-          <p className="text-xl text-slate-900 leading-relaxed font-medium">{currentQuestion.text}</p>
-          {currentQuestion.used && <div className="mt-3 text-xs text-slate-400 bg-slate-100 inline-block px-2 py-0.5 rounded">Already used</div>}
+        <div className={`rounded-2xl border-2 overflow-hidden mb-6 transition-colors ${currentQuestion.used ? 'border-slate-200 bg-slate-50' : 'border-indigo-200 bg-white'}`}>
+          {currentQuestion.image_url && (
+            <div className="relative w-full h-48">
+              <Image src={currentQuestion.image_url} alt="" fill className="object-cover" />
+            </div>
+          )}
+          <div className="p-8">
+            <div className="text-xs font-semibold text-indigo-400 uppercase tracking-wide mb-3">{currentQuestion.category}</div>
+            <p className="text-xl text-slate-900 leading-relaxed font-medium">{currentQuestion.text}</p>
+            {currentQuestion.used && <div className="mt-3 text-xs text-slate-400 bg-slate-100 inline-block px-2 py-0.5 rounded">Already used</div>}
+          </div>
         </div>
       ) : (
         <div className="rounded-2xl border-2 border-dashed border-slate-200 p-8 mb-6 text-center">
