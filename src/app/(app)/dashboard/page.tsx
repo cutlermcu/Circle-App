@@ -57,14 +57,13 @@ export default async function DashboardPage() {
         </h2>
         <div className="bg-white rounded-xl border border-slate-200 divide-y divide-slate-100">
           {[
-            { step: 1, label: 'Agreements', desc: 'Set the container for the circle', icon: '📜' },
-            { step: 2, label: 'Grounding', desc: 'Arrive together with a grounding practice', icon: '🌿' },
-            { step: 3, label: 'Check-in', desc: 'Each person shares how they\'re showing up', icon: '💬' },
-            { step: 4, label: 'Question Rounds', desc: 'Explore a topic with guided questions', icon: '❓' },
-            { step: 5, label: 'Appreciations', desc: 'Close with gratitude', icon: '✨' },
+            { step: 1, label: 'Agreements', desc: 'Set the container for the circle' },
+            { step: 2, label: 'Grounding', desc: 'Arrive together with a grounding practice' },
+            { step: 3, label: 'Check-in', desc: 'Each person shares how they\'re showing up' },
+            { step: 4, label: 'Question Rounds', desc: 'Explore a topic with guided questions' },
+            { step: 5, label: 'Appreciations', desc: 'Close with gratitude' },
           ].map(item => (
             <div key={item.step} className="flex items-center gap-4 px-5 py-4">
-              <span className="text-xl">{item.icon}</span>
               <div className="flex-1">
                 <div className="font-medium text-slate-900">{item.step}. {item.label}</div>
                 <div className="text-sm text-slate-500">{item.desc}</div>

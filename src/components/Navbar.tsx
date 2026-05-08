@@ -32,7 +32,7 @@ export default function Navbar({ name }: { name: string }) {
           <div className="flex items-center gap-6">
             <Link href="/dashboard" className="flex items-center gap-2 font-bold text-indigo-900">
               <span className="text-xl">○</span>
-              <span className="text-base">Circle App</span>
+              <span className="text-base">Circle</span>
             </Link>
             <div className="hidden md:flex items-center gap-1">
               {links.map(link => (

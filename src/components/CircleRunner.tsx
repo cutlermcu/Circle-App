@@ -6,11 +6,11 @@ import type { CircleData, Question, Prompt } from '@/types'
 import { markQuestionUsed, resetUsedQuestions } from '@/actions/circle'
 
 const STEPS = [
-  { key: 'agreements', label: 'Agreements', icon: '📜' },
-  { key: 'grounding', label: 'Grounding', icon: '🌿' },
-  { key: 'checkin', label: 'Check-in', icon: '💬' },
-  { key: 'questions', label: 'Question Rounds', icon: '❓' },
-  { key: 'appreciations', label: 'Appreciations', icon: '✨' },
+  { key: 'agreements', label: 'Agreements' },
+  { key: 'grounding', label: 'Grounding' },
+  { key: 'checkin', label: 'Check-in' },
+  { key: 'questions', label: 'Question Rounds' },
+  { key: 'appreciations', label: 'Appreciations' },
 ] as const
 
 type StepKey = typeof STEPS[number]['key']
@@ -147,7 +147,6 @@ export default function CircleRunner({
         {step.key === 'grounding' && (
           <StepPrompt
             title="Grounding"
-            icon="🌿"
             prompt={currentPrompt}
             allPrompts={data.groundingPrompts}
             onPickRandom={() => setCurrentPrompt(getRandomPrompt(data.groundingPrompts))}
@@ -157,7 +156,6 @@ export default function CircleRunner({
         {step.key === 'checkin' && (
           <StepPrompt
             title="Check-in"
-            icon="💬"
             prompt={currentPrompt}
             allPrompts={data.checkinPrompts}
             onPickRandom={() => setCurrentPrompt(getRandomPrompt(data.checkinPrompts))}
@@ -181,7 +179,6 @@ export default function CircleRunner({
         {step.key === 'appreciations' && (
           <StepPrompt
             title="Appreciations"
-            icon="✨"
             prompt={currentPrompt}
             allPrompts={data.appreciationPrompts}
             onPickRandom={() => setCurrentPrompt(getRandomPrompt(data.appreciationPrompts))}
@@ -226,7 +223,6 @@ function StepAgreements({ agreements }: { agreements: CircleData['agreements'] }
   return (
     <div>
       <div className="mb-6">
-        <div className="text-3xl mb-2">📜</div>
         <h2 className="text-2xl font-bold text-slate-900">Circle Agreements</h2>
         <p className="text-slate-500 mt-1">Read each agreement aloud together before beginning.</p>
       </div>
@@ -249,14 +245,12 @@ function StepAgreements({ agreements }: { agreements: CircleData['agreements'] }
 
 function StepPrompt({
   title,
-  icon,
   prompt,
   allPrompts,
   onPickRandom,
   onSelect,
 }: {
   title: string
-  icon: string
   prompt: Prompt | null
   allPrompts: Prompt[]
   onPickRandom: () => void
@@ -267,7 +261,6 @@ function StepPrompt({
   return (
     <div>
       <div className="mb-6">
-        <div className="text-3xl mb-2">{icon}</div>
         <h2 className="text-2xl font-bold text-slate-900">{title}</h2>
       </div>
 
@@ -345,7 +338,6 @@ function StepQuestions({
   return (
     <div>
       <div className="mb-6">
-        <div className="text-3xl mb-2">❓</div>
         <h2 className="text-2xl font-bold text-slate-900">Question Rounds</h2>
         <p className="text-slate-500 mt-1">
           {unusedCount} unused question{unusedCount !== 1 ? 's' : ''} remaining

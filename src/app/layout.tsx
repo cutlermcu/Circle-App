@@ -5,7 +5,7 @@ import './globals.css'
 const geist = Geist({ subsets: ['latin'], variable: '--font-geist' })
 
 export const metadata: Metadata = {
-  title: 'Circle App',
+  title: 'Circle',
   description: 'A community-building circle tool for teachers',
 }
 
