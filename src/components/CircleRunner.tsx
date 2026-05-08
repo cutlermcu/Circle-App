@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useTransition, useCallback } from 'react'
+import { useState, useTransition, useCallback, useRef, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import type { CircleData, Question, Prompt } from '@/types'
 import { markQuestionUsed, resetUsedQuestions } from '@/actions/circle'
@@ -23,12 +23,30 @@ export default function CircleRunner({
   teacherId: string
 }) {
   const router = useRouter()
+  const containerRef = useRef<HTMLDivElement>(null)
   const [currentStep, setCurrentStep] = useState<number>(0)
   const [currentPrompt, setCurrentPrompt] = useState<Prompt | null>(null)
   const [currentQuestion, setCurrentQuestion] = useState<Question | null>(null)
   const [questions, setQuestions] = useState<Question[]>(data.questions)
   const [showQuestionPicker, setShowQuestionPicker] = useState(false)
   const [isPending, startTransition] = useTransition()
+  const [isFullscreen, setIsFullscreen] = useState(false)
+
+  useEffect(() => {
+    function onFullscreenChange() {
+      setIsFullscreen(!!document.fullscreenElement)
+    }
+    document.addEventListener('fullscreenchange', onFullscreenChange)
+    return () => document.removeEventListener('fullscreenchange', onFullscreenChange)
+  }, [])
+
+  function toggleFullscreen() {
+    if (!document.fullscreenElement) {
+      containerRef.current?.requestFullscreen()
+    } else {
+      document.exitFullscreen()
+    }
+  }
 
   const unusedQuestions = questions.filter(q => !q.used)
   const usedQuestions = questions.filter(q => q.used)
@@ -104,7 +122,35 @@ export default function CircleRunner({
   const isLastStep = currentStep === STEPS.length - 1
 
   return (
-    <div className="min-h-[calc(100vh-3.5rem)] flex flex-col">
+    <div
+      ref={containerRef}
+      className={`flex flex-col ${isFullscreen ? 'fixed inset-0 bg-slate-50 p-8 overflow-y-auto z-50' : 'min-h-[calc(100vh-3.5rem)]'}`}
+    >
+      {/* Fullscreen toggle */}
+      <div className="flex justify-end mb-2">
+        <button
+          onClick={toggleFullscreen}
+          className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-slate-500 hover:text-slate-800 rounded-lg hover:bg-slate-100 transition-colors"
+          title={isFullscreen ? 'Exit full screen' : 'Present full screen'}
+        >
+          {isFullscreen ? (
+            <>
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 9V4.5M9 9H4.5M9 9L3.75 3.75M9 15v4.5M9 15H4.5M9 15l-5.25 5.25M15 9h4.5M15 9V4.5M15 9l5.25-5.25M15 15h4.5M15 15v4.5m0-4.5l5.25 5.25" />
+              </svg>
+              Exit full screen
+            </>
+          ) : (
+            <>
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3.75 3.75v4.5m0-4.5h4.5m-4.5 0L9 9M3.75 20.25v-4.5m0 4.5h4.5m-4.5 0L9 15M20.25 3.75h-4.5m4.5 0v4.5m0-4.5L15 9m5.25 11.25h-4.5m4.5 0v-4.5m0 4.5L15 15" />
+              </svg>
+              Present full screen
+            </>
+          )}
+        </button>
+      </div>
+
       {/* Progress bar */}
       <div className="mb-8">
         <div className="flex items-center justify-between mb-3">
